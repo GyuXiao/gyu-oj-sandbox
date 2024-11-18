@@ -1,14 +1,14 @@
 module gyu-oj-sandbox
 
-go 1.22.9
+go 1.22.0
 
 require (
 	github.com/docker/docker v27.3.1+incompatible
 	github.com/google/uuid v1.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-zero v1.6.6
-	google.golang.org/grpc v1.68.0
-	google.golang.org/protobuf v1.35.2
+	google.golang.org/grpc v1.66.0
+	google.golang.org/protobuf v1.34.2
 )
 
 require (

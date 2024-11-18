@@ -178,8 +178,7 @@ func (g *SandboxByDocker) RunCode(userCodePath string, inputList []string) ([]*m
 		// for 循环跑所有输入样例
 		for i, input := range inputList {
 			cmdStr := RunCmdStr + strings.TrimSpace(input)
-			runCmd := strings.Split(strings.TrimSpace(cmdStr), " ")
-			res, err := g.runCodeInContainer(cid, runCmd)
+			res, err := g.runCodeInContainer(cid, []string{cmdStr})
 			if err != nil {
 				logc.Infof(g.Ctx, "运行代码失败: %v", err)
 				doneOfRunCode <- err
