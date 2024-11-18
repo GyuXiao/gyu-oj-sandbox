@@ -67,9 +67,9 @@ func (g *SandboxByGoNative) SaveCodeToFile(userCode []byte) (string, error) {
 }
 
 func (g *SandboxByGoNative) CompileCode(userCodePath string) error {
-	//if runtime.GOOS == "windows" {
-	//	GoBinaryFileName = GoBinaryFileName + ".exe"
-	//}
+	if runtime.GOOS == "windows" {
+		GoBinaryFileName = GoBinaryFileName + ".exe"
+	}
 
 	parentPath := filepath.Dir(userCodePath)
 	compileCmdStr := fmt.Sprintf("go build -o %s/%s %s", parentPath, GoBinaryFileName, userCodePath)
@@ -101,9 +101,6 @@ func (g *SandboxByGoNative) CompileCode(userCodePath string) error {
 func (g *SandboxByGoNative) RunCode(userCodePath string, inputList []string) ([]*models.ExecResult, error) {
 	parentPath := filepath.Dir(userCodePath)
 	runCmdStr := fmt.Sprintf("%s/%s", parentPath, GoBinaryFileName)
-	//if runtime.GOOS != "windows" {
-	//	runCmdStr = "./" + runCmdStr
-	//}
 
 	done := make(chan error, 1)
 	executeResult := make([]*models.ExecResult, len(inputList))
