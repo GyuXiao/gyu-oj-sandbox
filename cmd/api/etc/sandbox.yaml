@@ -1,0 +1,13 @@
+Name: sandbox-api
+Host: 0.0.0.0
+Port: 1004
+
+Log:
+  ServiceName: sandbox-api
+  Level: info
+
+# rpc service
+SandboxRpcConf:
+  Endpoints:
+    - 127.0.0.1:2004
+  NonBlock: true

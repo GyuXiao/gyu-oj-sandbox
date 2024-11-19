@@ -38,11 +38,12 @@ func (l *ExecuteCodeLogic) ExecuteCode(in *pb.ExecuteCodeReq) (*pb.ExecuteCodeRe
 
 	// 2,使用代码沙箱
 	resp, err := SandboxTemplate(sandbox, in)
+	// 开启 goroutine 释放资源
+	go ReleaseSource(context.Background(), l.svcCtx.Config.SandboxBy.Type, l.svcCtx.DockerClient)
+
 	if err != nil {
 		return nil, err
 	}
-
-	go ReleaseSource(context.Background(), l.svcCtx.Config.SandboxBy.Type, l.svcCtx.DockerClient)
 
 	// 3,返回代码输出结果
 	return resp, nil

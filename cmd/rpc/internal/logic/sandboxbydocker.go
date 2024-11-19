@@ -18,6 +18,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -92,9 +93,13 @@ func (g *SandboxByDocker) SaveCodeToFile(userCode []byte) (string, error) {
 	return codePath, nil
 }
 
-// 2,在 linux 本地环境里编译为可执行文件
+// 2,在本地环境里编译为可执行文件
 
 func (g *SandboxByDocker) CompileCode(userCodePath string) error {
+	if runtime.GOOS == "windows" {
+		GoBinaryFileName = GoBinaryFileName + ".exe"
+	}
+
 	parentPath := filepath.Dir(userCodePath)
 	compileCmdStr := fmt.Sprintf("go build -o %s/%s %s", parentPath, GoBinaryFileName, userCodePath)
 	fmt.Println("编译代码的命令: ", compileCmdStr)

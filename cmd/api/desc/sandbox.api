@@ -1,0 +1,37 @@
+syntax = "v1"
+
+info (
+	title:   "sandbox module"
+	desc:    "sandbox module"
+	author:  "GyuXiao"
+	version: "v1"
+)
+
+type (
+	ExecuteReq {
+		InputList []string `json:"inputList"`
+		Code      string   `json:"code"`
+		Language  string   `json:"language"`
+	}
+	ExecuteResp {
+		OutputList           []string `json:"outputList"`
+		Message              string   `json:"message"`
+		Status               int64    `json:"status"`
+		ExecuteResultMessage string   `json:"executeResultMessage"`
+		ExecuteResultTime    int64    `json:"executeResultTime"`
+		ExecuteResultMemory  int64    `json:"executeResultMemory"`
+	}
+)
+
+@server (
+	prefix: gyu_oj/v1
+	group:  sandbox
+)
+service sandbox {
+	@doc "executeCode"
+	@handler execute
+	post /sandbox/execute (ExecuteReq) returns (ExecuteResp)
+}
+
+// 在 api/desc 目录下执行
+// goctl api go -api sandbox.api -dir ../  --style=goZero
