@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/client"
+	"github.com/zeromicro/go-zero/core/logc"
 
 	"gyu-oj-sandbox/cmd/rpc/internal/svc"
 	"gyu-oj-sandbox/cmd/rpc/pb"
@@ -39,6 +42,23 @@ func (l *ExecuteCodeLogic) ExecuteCode(in *pb.ExecuteCodeReq) (*pb.ExecuteCodeRe
 		return nil, err
 	}
 
+	go ReleaseSource(context.Background(), l.svcCtx.Config.SandboxBy.Type, l.svcCtx.DockerClient)
+
 	// 3,返回代码输出结果
 	return resp, nil
+}
+
+func ReleaseSource(ctx context.Context, sandboxType string, cli *client.Client) {
+	if sandboxType != "docker" || GlobalContainerID == "" || cli == nil {
+		return
+	}
+	// 删除容器（先停后删）
+	err := cli.ContainerStop(ctx, GlobalContainerID, container.StopOptions{})
+	if err != nil {
+		logc.Infof(ctx, "停止容器错误: %v", err)
+	}
+	err = cli.ContainerRemove(ctx, GlobalContainerID, container.RemoveOptions{})
+	if err != nil {
+		logc.Infof(ctx, "删除容器错误: %v", err)
+	}
 }

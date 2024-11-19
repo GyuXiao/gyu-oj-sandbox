@@ -22,4 +22,4 @@ Log:
 
 # golang or docker
 SandboxBy:
-  Type: golang
+  Type: docker

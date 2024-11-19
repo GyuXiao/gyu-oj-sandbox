@@ -26,20 +26,19 @@ import (
 * 基于 docker 运行用户代码的所有步骤:
   1,把用户的代码保存为文件
   2,编译代码，得到 Go 可执行文件
-  3,把编译好的文件上传到容器环境内
+  3,本地环境和容器环境的数据卷映射
   4,在容器中执行代码，得到输出结果
   5,收集整理输出结果
   6,文件清理，释放空间
-  7,错误处理，提升程序健壮性
 */
 
 var (
-	globalContainerID string
+	GlobalContainerID string
 )
 
 const (
 	RunGoImage       = "alpine:latest"
-	RunCmdStr        = "./main "
+	RunCmdStr        = "./main"
 	ContainerWorkDir = "/app"
 	UserCodeName     = "main.go"
 )
@@ -137,7 +136,7 @@ func (g *SandboxByDocker) RunCode(userCodePath string, inputList []string) ([]*m
 		logc.Infof(g.Ctx, "创建并启动容器错误: ", err)
 		return nil, err
 	}
-	globalContainerID = containerId
+	GlobalContainerID = containerId
 
 	// 结果列表
 	executeResultList := make([]*models.ExecResult, len(inputList))
@@ -177,8 +176,8 @@ func (g *SandboxByDocker) RunCode(userCodePath string, inputList []string) ([]*m
 	go func(cid string) {
 		// for 循环跑所有输入样例
 		for i, input := range inputList {
-			cmdStr := RunCmdStr + strings.TrimSpace(input)
-			res, err := g.runCodeInContainer(cid, []string{cmdStr})
+			input = strings.TrimSpace(input)
+			res, err := g.runCodeInContainer(cid, []string{RunCmdStr, input})
 			if err != nil {
 				logc.Infof(g.Ctx, "运行代码失败: %v", err)
 				doneOfRunCode <- err
@@ -360,21 +359,4 @@ func (g *SandboxByDocker) CreateAndStartContainer(image, volume string) (string,
 	}
 
 	return containerId, nil
-}
-
-// 关停并删除一个 docker 容器
-
-func (g *SandboxByDocker) StopAndRemoveContainer(containerId string) error {
-	// 删除容器（先停后删）
-	err := g.Cli.ContainerStop(g.Ctx, containerId, container.StopOptions{})
-	if err != nil {
-		logc.Infof(g.Ctx, "停止容器错误: %v", err)
-		return err
-	}
-	err = g.Cli.ContainerRemove(g.Ctx, containerId, container.RemoveOptions{})
-	if err != nil {
-		logc.Infof(g.Ctx, "删除容器错误: %v", err)
-		return err
-	}
-	return nil
 }
