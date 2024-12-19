@@ -1,9 +1,9 @@
-package logic
+package sandbox
 
 import (
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
-	"gyu-oj-sandbox/cmd/rpc/pb"
+	"gyu-oj-sandbox/cmd/api/internal/types"
 	"gyu-oj-sandbox/common/xerr"
 	"gyu-oj-sandbox/models/enums"
 	"time"
@@ -16,8 +16,8 @@ var (
 	MemoryLimit      = 128                     //内存限制（MB）
 )
 
-func SandboxTemplate(c ExecuteCodeItf, param *pb.ExecuteCodeReq) (*pb.ExecuteCodeResp, error) {
-	resp := &pb.ExecuteCodeResp{}
+func SandboxTemplate(c ExecuteCodeItf, param *types.ExecuteReq) (*types.ExecuteResp, error) {
+	resp := &types.ExecuteResp{}
 	// 1，保存文件
 	userCodePath, err := c.SaveCodeToFile([]byte(param.Code))
 	if err != nil {

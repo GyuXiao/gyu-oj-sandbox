@@ -1,4 +1,4 @@
-package logic
+package sandbox
 
 import (
 	"bytes"
@@ -9,7 +9,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/zeromicro/go-zero/core/logc"
-	"gyu-oj-sandbox/cmd/rpc/pb"
+	"gyu-oj-sandbox/cmd/api/internal/types"
 	"gyu-oj-sandbox/common/tools"
 	"gyu-oj-sandbox/common/xerr"
 	"gyu-oj-sandbox/models"
@@ -275,8 +275,8 @@ func (g *SandboxByDocker) runCodeInContainer(containerId string, runCmd []string
 
 // 4,整理输出数据
 
-func (g *SandboxByDocker) GetOutputResponse(executeResult []*models.ExecResult) *pb.ExecuteCodeResp {
-	resp := &pb.ExecuteCodeResp{
+func (g *SandboxByDocker) GetOutputResponse(executeResult []*models.ExecResult) *types.ExecuteResp {
+	resp := &types.ExecuteResp{
 		Message: enums.Success.GetMsg(),
 		Status:  enums.Success.GetStatus(),
 	}

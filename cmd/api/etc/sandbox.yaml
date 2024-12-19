@@ -6,8 +6,6 @@ Log:
   ServiceName: sandbox-api
   Level: info
 
-# rpc service
-SandboxRpcConf:
-  Endpoints:
-    - 127.0.0.1:2004
-  NonBlock: true
+# 可以选择 golang 或者是 docker
+SandboxBy:
+  Type: golang

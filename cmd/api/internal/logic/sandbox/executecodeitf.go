@@ -1,7 +1,7 @@
-package logic
+package sandbox
 
 import (
-	"gyu-oj-sandbox/cmd/rpc/pb"
+	"gyu-oj-sandbox/cmd/api/internal/types"
 	"gyu-oj-sandbox/models"
 )
 
@@ -16,6 +16,6 @@ type ExecuteCodeItf interface {
 	SaveCodeToFile([]byte) (string, error)
 	CompileCode(string) error
 	RunCode(string, []string) ([]*models.ExecResult, error)
-	GetOutputResponse([]*models.ExecResult) *pb.ExecuteCodeResp
+	GetOutputResponse([]*models.ExecResult) *types.ExecuteResp
 	DropFile(string) error
 }

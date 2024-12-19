@@ -1,11 +1,11 @@
-package logic
+package sandbox
 
 import (
 	"bytes"
 	"context"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/logc"
-	"gyu-oj-sandbox/cmd/rpc/pb"
+	"gyu-oj-sandbox/cmd/api/internal/types"
 	"gyu-oj-sandbox/common/tools"
 	"gyu-oj-sandbox/common/xerr"
 	"gyu-oj-sandbox/models"
@@ -175,8 +175,8 @@ func doRun(ctx context.Context, input string, runCmdStr string) (*models.ExecRes
 	}, nil
 }
 
-func (g *SandboxByGoNative) GetOutputResponse(executeResult []*models.ExecResult) *pb.ExecuteCodeResp {
-	resp := &pb.ExecuteCodeResp{
+func (g *SandboxByGoNative) GetOutputResponse(executeResult []*models.ExecResult) *types.ExecuteResp {
+	resp := &types.ExecuteResp{
 		Message: enums.Success.GetMsg(),
 		Status:  enums.Success.GetStatus(),
 	}
